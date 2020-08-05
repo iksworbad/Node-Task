@@ -3,15 +3,18 @@ import { Transport } from '@nestjs/microservices';
 import { AppModule } from './app.module';
 
 const microserviceOptions = {
-  transport: Transport.TCP,
+  transport: Transport.RMQ,
   options: {
-    host: '127.0.0.1',
-    port: 9002
-  }
+    urls: ['amqp://localhost:5672'],
+    queue: 'cats_queue',
+    queueOptions: {
+      durable: false
+    },
+  },
 }
 
 async function bootstrap() {
   const app = await NestFactory.createMicroservice(AppModule, microserviceOptions);
-  app.listen(() => console.log(`Microservice is listening on port: ${microserviceOptions.options.port}`));
+  app.listen(() => console.log(`Microservice is listening ...`));
 }
 bootstrap();
