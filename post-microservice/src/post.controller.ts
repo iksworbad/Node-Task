@@ -12,7 +12,6 @@ export class PostController {
 
   @MessagePattern('getPosts')
   async handleMessagePrinted(data: number[]) {
-    console.log('getimages ', data);
     
     this.logger.log('Find posts by id: ' + data)
     return this.PostService.getPosts(data)

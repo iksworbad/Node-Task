@@ -17,9 +17,7 @@ export class AppController {
   @Get('feed')
   async getUserId(@Headers() headers) {
     let res
-    const userId = this.userService.getUser(headers.user)
-    console.log(await userId.toPromise());
-    
+    const userId = this.userService.getUser(headers.user)    
     const unreaded = this.userPostService.getUnreadedPosts(await userId.toPromise())
 
     return this.postService.getPosts(JSON.parse(await unreaded.toPromise()))
