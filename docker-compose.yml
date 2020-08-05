@@ -5,7 +5,7 @@ services:
     image: rabbitmq:3-management
     ports: 
       - 15672:15672
-      - 5672:5672
+      - 5672:5674
   secure-rabbitmq:
     image: rabbitmq:3-management
     ports:
@@ -39,7 +39,8 @@ services:
       - /usr/src/app/node_modules
     command: yarn start
     environment: 
-      - RDS_HOSTNAME=db
+      RDS_HOSTNAME: postgres
+      RDS_PASSWORD: postgres
     networks:
       - webnet
     depends_on:
@@ -54,7 +55,8 @@ services:
       - /usr/src/app/node_modules
     command: yarn start
     environment: 
-      - RDS_HOSTNAME=db
+      RDS_HOSTNAME: postgres
+      RDS_PASSWORD: postgres
     networks:
       - webnet
     depends_on:

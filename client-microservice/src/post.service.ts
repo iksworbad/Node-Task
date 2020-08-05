@@ -7,15 +7,18 @@ export class PostService {
 
   constructor() {
     this.client = ClientProxyFactory.create({
-      transport: Transport.TCP,
+      transport: Transport.RMQ,
       options: {
-        host: '127.0.0.1',
-        port: 9002
-      }
+        urls: ['amqp://localhost:5672'],
+        queue: 'cats_queue',
+        queueOptions: {
+          durable: false
+        },
+      },
     })
   }
 
   public getPosts(data: number[]) {
-    return this.client.send<{id: number, imageUrl: string}[], number[]>('getPosts', data)
+    return this.client.send<{ id: number, imageUrl: string }[], number[]>('getPosts', data)
   }
 }

@@ -12,7 +12,7 @@ import { Transport, ClientsModule } from '@nestjs/microservices';
         name: 'USER_POST_SERVICE',
         transport: Transport.RMQ,
         options: {
-          urls: ['amqp://localhost:5672'],
+          urls: ['amqp://localhost:5672','amqp://localhost:5673', 'amqp://localhost:5674'],
           queue: 'cats_queue',
           queueOptions: {
             durable: false

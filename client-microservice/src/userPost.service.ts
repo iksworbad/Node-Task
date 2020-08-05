@@ -7,10 +7,13 @@ export class UserPostService {
 
   constructor() {
     this.client = ClientProxyFactory.create({
-      transport: Transport.TCP,
+      transport: Transport.RMQ,
       options: {
-        host: '127.0.0.1',
-        port: 9003
+        urls: ['amqp://localhost:5674'],
+        queue: 'cats_queue',
+        queueOptions: {
+          durable: false
+        },
       }
     })
   }
