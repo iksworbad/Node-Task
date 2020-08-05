@@ -14,3 +14,84 @@ services:
     environment: 
       RABBITMQ_DEFAULT_PASS: pass
       RABBITMQ_DEFAULT_USER: user
+
+  client:
+    container_name: client
+    build:
+      context: ./client-microservice
+    volumes:
+      - .:/usr/src/app
+      - /usr/src/app/node_modules
+    ports:
+      - 9001:9001
+    command: yarn start
+    networks:
+      - webnet
+    depends_on:
+      - postgres
+
+  post:
+    container_name: post
+    build:
+      context: ./post-microservice
+    volumes:
+      - .:/usr/src/app
+      - /usr/src/app/node_modules
+    command: yarn start
+    environment: 
+      - RDS_HOSTNAME=db
+    networks:
+      - webnet
+    depends_on:
+      - postgres
+
+  user:
+    container_name: user
+    build:
+      context: ./user-microservice
+    volumes:
+      - .:/usr/src/app
+      - /usr/src/app/node_modules
+    command: yarn start
+    environment: 
+      - RDS_HOSTNAME=db
+    networks:
+      - webnet
+    depends_on:
+      - postgres
+
+  userpost:
+    container_name: userpost
+    build:
+      context: ./user-post-microservice
+    volumes:
+      - .:/usr/src/app
+      - /usr/src/app/node_modules
+    command: yarn start
+    environment: 
+      RDS_HOSTNAME: postgres
+      RDS_PASSWORD: postgres
+    networks:
+      - webnet
+    depends_on:
+      - postgres
+
+  postgres:
+    container_name: postgres
+    image: postgres:12
+    networks:
+      - webnet
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=user
+      - POSTGRES_DB=post
+      - POSTGRES_DB=userpost
+    ports:
+      - 5432:5432
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+networks:
+  webnet:
+volumes:
+  pgdata:
